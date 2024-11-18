@@ -1,9 +1,13 @@
 #pragma once
+#include <vector>
+
+using std::vector;
 
 class Piece {
   public:
-    Piece();
-    //getShape();
-    short getColor(); // 0-7 is various ncurses consts
-    
+    Piece(int pieceType);
+    vector<vector<int>> getBlocks();
+    short getColor(); // 1-8 is various ncurses color pairs
+  private:
+  vector<vector<int>> blocks;
 };
