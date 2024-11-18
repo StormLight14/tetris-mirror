@@ -11,7 +11,7 @@ all: $(TARGET)
 
 # Rule to build the target
 $(TARGET): $(SRC)
-	$(CXX) $(CXXFLAGS) -o $(TARGET) $(SRC)
+	$(CXX) $(CXXFLAGS) -o $(TARGET) $(SRC) -lncurses
 
 # Clean up build artifacts
 clean:
