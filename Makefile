@@ -4,7 +4,7 @@ CXXFLAGS = -std=c++20
 
 # Define the target executable and source file
 TARGET = main
-SRC = main.cpp
+SRC = main.cpp Game.cpp Piece.cpp
 
 # Default target to build
 all: $(TARGET)

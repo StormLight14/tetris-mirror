@@ -1,8 +1,9 @@
 #include "Game.hpp"
-#include <curses.h>
 
 Game::Game() {
-
+  score = 0;
+  level = 0;
+  pieces = {};
 }
 
 void Game::initCurses() {
@@ -13,13 +14,13 @@ void Game::initCurses() {
 }
 
 void Game::handleGravity() {
-
+  
 }
 
 void Game::handleInput() {
-
+  
 }
 
 void Game::displayGame() {
-
+  
 }
