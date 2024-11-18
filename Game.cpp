@@ -34,12 +34,15 @@ void Game::handleInput() {
   int key = getch();
   // printw("\n%d", key);
 
-  if (key == 97 || key == 260) {
-    printw("\nPressed left.");
-  } else if (key == 115 || key == 258) {
-    printw("\nPressed down.");
-  } else if (key == 100 || key == 261) {
-    printw("\nPressed right.");
+  // w, left
+  if (key == 97 || key == KEY_LEFT) {
+    printw("Pressed left.\n");
+    // s, down
+  } else if (key == 115 || key == KEY_DOWN) {
+    printw("Pressed down.\n");
+    // d, right
+  } else if (key == 100 || key == KEY_RIGHT) {
+    printw("Pressed right.\n");
   }
   
   refresh();
