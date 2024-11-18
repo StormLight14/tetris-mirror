@@ -9,6 +9,7 @@ using std::vector;
 class Game {
   public:
     Game();
+    void initCurses();
     void handleInput();
     void handleGravity();
     void displayGame();
