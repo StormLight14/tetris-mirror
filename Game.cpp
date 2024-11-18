@@ -15,6 +15,8 @@ void Game::initCurses() {
   noecho();
   keypad(stdscr, true); // for arrow keys
   
+  nodelay(stdscr, true); // getch() gives ERR if no input
+  
   init_pair(1, COLOR_CYAN, COLOR_BLACK);
   init_pair(2, COLOR_YELLOW, COLOR_BLACK);
   init_pair(3, COLOR_MAGENTA, COLOR_BLACK);
