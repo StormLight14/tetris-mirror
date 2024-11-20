@@ -12,7 +12,7 @@ class Piece {
 
     Piece(PieceType pieceType);
     void rotate(); // will be clockwise
-    vector<pair<int, int>> getBlockCoordinates() const; // gets coordinates of each block that makes up the shape
+    vector<pair<int, int>> getShape() const; // gets coordinates of each block that makes up the shape
     PieceType getPieceType() const;
     void setPosition(int x, int y);
     void move(int dirX, int dirY);

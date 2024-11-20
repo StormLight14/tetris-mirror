@@ -6,7 +6,7 @@ int main() {
   game.initCurses();
 
   // main game loop
-  while (true) {
+  while (game.playing) {
     game.handleGravity();
     game.handleInput();
     game.displayGame();

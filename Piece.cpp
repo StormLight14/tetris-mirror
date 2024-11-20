@@ -30,6 +30,10 @@ void Piece::setShape() {
   }
 }
 
+vector<pair<int, int>> Piece::getShape() const {
+  return shape;
+}
+
 void Piece::rotate() {
   // goes over each block in the shape
   for (auto& block : shape) {

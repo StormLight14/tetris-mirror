@@ -1,11 +1,7 @@
 #include "Game.hpp"
 #include <iostream>
 
-Game::Game() {
-  score = 0;
-  level = 0;
-  pieces = {};
-}
+Game::Game() : playing(true), score(0), level(0), pieces({}) {}
 
 void Game::initCurses() {
   initscr();
@@ -32,17 +28,19 @@ void Game::handleGravity() {
 
 void Game::handleInput() {
   int key = getch();
-  // printw("\n%d", key);
+  //printw("\n%d", key);
 
-  // w, left
-  if (key == 97 || key == KEY_LEFT) {
+  // a, left
+  if (key == 'a' || key == KEY_LEFT) {
     printw("Pressed left.\n");
     // s, down
-  } else if (key == 115 || key == KEY_DOWN) {
+  } else if (key == 's' || key == KEY_DOWN) {
     printw("Pressed down.\n");
     // d, right
-  } else if (key == 100 || key == KEY_RIGHT) {
+  } else if (key == 'd' || key == KEY_RIGHT) {
     printw("Pressed right.\n");
+  } else if (key == 'q') {
+    playing = false;
   }
   
   refresh();

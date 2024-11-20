@@ -14,6 +14,7 @@ class Game {
     void handleGravity();
     void displayGame();
     vector<Piece> getPieces();
+    bool playing;
   private:
     int score;
     int level;
