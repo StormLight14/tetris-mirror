@@ -28,17 +28,15 @@ void Game::handleGravity() {
 
 void Game::handleInput() {
   int key = getch();
-  //printw("\n%d", key);
 
-  // a, left
   if (key == 'a' || key == KEY_LEFT) {
-    printw("Pressed left.\n");
-    // s, down
+
   } else if (key == 's' || key == KEY_DOWN) {
-    printw("Pressed down.\n");
-    // d, right
+
   } else if (key == 'd' || key == KEY_RIGHT) {
-    printw("Pressed right.\n");
+
+  } else if (key == 'w' || key == KEY_UP) {
+
   } else if (key == 'q') {
     playing = false;
   }
