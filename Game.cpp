@@ -32,7 +32,7 @@ int Game::getGridHeight() {
   return 20;
 }
 
-void Game::clearGrid() {
+void Game::setDefaultGrid() {
   grid = {};
 
   for (int i=0; i<getGridHeight(); i++) {
@@ -70,8 +70,8 @@ void Game::handleInput() {
 
 void Game::displayGame() {
   clear(); // clear window
-  printw("hi");
   refresh();
+
   for (auto &row : grid) {
     for (auto &character : row) {
       printw("%c", character);

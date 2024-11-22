@@ -17,7 +17,7 @@ class Game {
     int getGridHeight();
     vector<Piece> getPieces();
     vector<vector<char>> getGrid();
-    void clearGrid();
+    void setDefaultGrid();
     bool playing;
   private:
     int score;
