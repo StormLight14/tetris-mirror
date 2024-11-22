@@ -23,9 +23,11 @@ int main() {
 
   std::thread gameThread([&]() { // uses a lambda thingy to run input code on a separate thread
     while (true) {
-      std::lock_guard<std::mutex> lock(gameMutex); // locks mutex for thread safety, unlocks when done using
-      game.handleGravity();
-      game.displayGame();
+      {
+        std::lock_guard<std::mutex> lock(gameMutex); // locks mutex for thread safety, unlocks when done using
+        game.handleGravity();
+      }
+      game.displayGame(); // doesn't modify shared state stuff so no lock
 
       if (!game.playing) {
         break;

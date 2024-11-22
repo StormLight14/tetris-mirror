@@ -69,11 +69,13 @@ void Game::handleInput() {
 }
 
 void Game::displayGame() {
-  refresh();
+  clear(); // clear window
   printw("hi");
+  refresh();
   for (auto &row : grid) {
     for (auto &character : row) {
       printw("%c", character);
     }
+    printw("\n");
   }
 }
