@@ -13,11 +13,16 @@ class Game {
     void handleInput();
     void handleGravity();
     void displayGame();
+    int getGridWidth();
+    int getGridHeight();
     vector<Piece> getPieces();
+    vector<vector<char>> getGrid();
+    void clearGrid();
     bool playing;
   private:
     int score;
     int level;
     vector<Piece> pieces;
+    vector<vector<char>> grid;
 };
 
