@@ -27,8 +27,8 @@ int main() {
         std::lock_guard<std::mutex> lock(gameMutex); // locks mutex for thread safety, unlocks when done using
         game.setDefaultGrid();
         game.handleGravity();
+        game.displayGame();
       }
-      game.displayGame(); // doesn't modify shared state stuff so no lock
 
       if (!game.playing) {
         break;

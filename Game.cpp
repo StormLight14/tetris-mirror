@@ -70,12 +70,14 @@ void Game::handleInput() {
 
 void Game::displayGame() {
   clear(); // clear window
-  refresh();
 
   for (auto &row : grid) {
+    printw("|");
     for (auto &character : row) {
       printw("%c", character);
     }
-    printw("\n");
+    printw("|\n");
   }
+
+  refresh(); // show updated display
 }
