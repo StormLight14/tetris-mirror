@@ -34,26 +34,41 @@ vector<pair<int, int>> Piece::getShape() const {
   return shape;
 }
 
+vector<pair<int, int>> Piece::getGlobalShape() {
+  vector<pair<int, int>> globalShape = {};
+
+  for (auto& offset : getShape()) {
+    pair<int, int> newPair = {getPosition().first + offset.first, getPosition().second + offset.second};
+    globalShape.push_back(newPair);
+  }
+
+  return globalShape;
+}
+
 void Piece::rotate() {
   // goes over each block in the shape
   for (auto& block : shape) {
     // clockwise is (y, -x) i think..
-    int x = block.first;
-    int y = block.second;
+    int x = block.second;
+    int y = block.first;
     block.first = y;
     block.second = -x;
   }
 }
 
-void Piece::setPosition(int x, int y) {
-  position = {x, y};
+void Piece::setPosition(int row, int col) {
+  position = {row, col}; // y, x
 }
 
 void Piece::setPosition(pair<int, int> pos) {
   position = pos;
 }
 
-void Piece::move(int dirX, int dirY) {
-  position.first += dirX;
-  position.second += dirY;
+void Piece::move(int dirY, int dirX) {
+  position.first += dirY;
+  position.second += dirX;
+}
+
+pair<int, int> Piece::getPosition() {
+  return position;
 }

@@ -1,9 +1,9 @@
 #include "Game.hpp"
-#include <iostream>
-#include <string>
+#include "Piece.hpp"
 #include <ncurses.h>
 
-Game::Game() : playing(true), score(0), level(0), pieces({}) {}
+Game::Game() : playing(true), score(0), level(0), pieces({Piece(Piece::PieceType::I)}) {
+}
 
 void Game::initCurses() {
   initscr();
@@ -47,7 +47,9 @@ void Game::setDefaultGrid() {
 }
 
 void Game::handleGravity() {
-  
+  for (auto& piece : pieces) {
+    piece.move(1, 0);
+  }
 }
 
 void Game::handleInput() {
@@ -70,8 +72,13 @@ void Game::handleInput() {
 
 void Game::displayGame() {
   clear(); // clear window
+  
+  for (auto& piece : pieces) {
+    for (auto& block : piece.getGlobalShape())
+    grid[block.first][block.second] = 'P';
+  }
 
-  for (auto &row : grid) {
+  for (auto& row : grid) {
     printw("|");
     for (auto &character : row) {
       printw("%c", character);
