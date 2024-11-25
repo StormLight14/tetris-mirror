@@ -48,7 +48,12 @@ void Game::setDefaultGrid() {
 
 void Game::handleGravity() {
   for (auto& piece : pieces) {
-    piece.move(1, 0);
+    for (auto& block : piece.getGlobalShape()) {
+      if (!(block.first < getGridHeight() - 1)) {
+        piece.move(1, 0);
+      }
+    }
+
   }
 }
 
