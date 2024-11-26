@@ -2,7 +2,7 @@
 #include "Piece.hpp"
 #include <ncurses.h>
 
-Game::Game() : playing(true), score(0), level(0), pieces({Piece(Piece::PieceType::I)}) {
+Game::Game() : playing(true), score(0), level(0), velocityX(1), pieces({Piece(Piece::PieceType::I)}) {
   activePiece = &pieces[0];
 }
 
@@ -51,20 +51,30 @@ void Game::setDefaultGrid() {
   }
 }
 
+bool Game::blockInPos(pair<int, int> pos) {
+  for (auto& piece : pieces) {
+    for (auto& block : piece.getGlobalShape()) {
+      if (block.first == pos.first && block.second == pos.second) {
+        return true;
+      }
+    }
+  }
+
+  return false;
+}
+
 void Game::handleMovement() {
   if (velocityX != 0 && activePiece != nullptr) {
     for (auto& block : activePiece->getGlobalShape()) {
-      
-      if (block.second <= 0 && block.second >= getGridWidth() - 1) {
+      if (block.second <= 0 || block.second >= getGridWidth() - 1) {
         return; // wall
       }
-
-      if (grid[block.first][block.second + velocityX] != '#') {
+      
+      if (blockInPos({block.first, block.second + velocityX})) {
         return; // a block is in the way
       }
 
-      playing = false;
-      move (0, velocityX);
+      activePiece->move(0, velocityX);
     }
   }
 }
