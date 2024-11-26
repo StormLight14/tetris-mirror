@@ -1,9 +1,13 @@
 #include "Game.hpp"
 #include "Piece.hpp"
 #include <ncurses.h>
-#include <string>
 
 Game::Game() : playing(true), score(0), level(0), pieces({Piece(Piece::PieceType::I)}) {
+  activePiece = &pieces[0];
+}
+
+Game::~Game() {
+  delete(activePiece);
 }
 
 void Game::initCurses() {
@@ -47,33 +51,59 @@ void Game::setDefaultGrid() {
   }
 }
 
-void Game::handleGravity() {
-  for (auto& piece : pieces) {
-    for (auto& block : piece.getGlobalShape()) {
-      if (!(block.first < getGridHeight() - 1)) {
-        return; // avoid block going past floor
+void Game::handleMovement() {
+  if (velocityX != 0 && activePiece != nullptr) {
+    for (auto& block : activePiece->getGlobalShape()) {
+      
+      if (block.second <= 0 && block.second >= getGridWidth() - 1) {
+        return; // wall
       }
-      if (grid[block.first + 1][block.second] != '#') {
-        return; // block collides with block under
+
+      if (grid[block.first][block.second + velocityX] != '#') {
+        return; // a block is in the way
       }
+
+      playing = false;
+      move (0, velocityX);
     }
-    piece.move(1, 0);
   }
+}
+
+void Game::handleGravity() {
+  if (activePiece == nullptr) {
+    return;
+  }
+
+  for (auto& block : activePiece->getGlobalShape()) {
+    if (!(block.first < getGridHeight() - 1)) {
+      return; // avoid block going past floor
+    }
+    if (grid[block.first + 1][block.second] != '#') {
+      return; // block collides with block under
+    }
+  }
+
+  activePiece->move(1, 0);
 
   refresh();
 }
+
 
 void Game::handleInput() {
   int key = getch();
 
   if (key == 'a' || key == KEY_LEFT) {
-    
-  } else if (key == 's' || key == KEY_DOWN) {
-
+    velocityX = -1;
   } else if (key == 'd' || key == KEY_RIGHT) {
+    velocityX = 1;
+  } else {
+    //velocityX = 0;
+  }
 
+  if (key == 's' || key == KEY_DOWN) {
+    // speed up movement speed
   } else if (key == 'w' || key == KEY_UP) {
-
+    // rotate
   } else if (key == 'q') {
     playing = false;
   }
