@@ -1,6 +1,7 @@
 #include "Game.hpp"
 #include "Piece.hpp"
 #include <ncurses.h>
+#include <string>
 
 Game::Game() : playing(true), score(0), level(0), pieces({Piece(Piece::PieceType::I)}) {
 }
@@ -50,11 +51,13 @@ void Game::handleGravity() {
   for (auto& piece : pieces) {
     for (auto& block : piece.getGlobalShape()) {
       if (!(block.first < getGridHeight() - 1)) {
-        piece.move(1, 0);
+        return; // avoid block going past floor
       }
     }
-
+    piece.move(1, 0);
   }
+
+  refresh();
 }
 
 void Game::handleInput() {

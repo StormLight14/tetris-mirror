@@ -7,7 +7,7 @@ Piece::Piece(PieceType t) : pieceType(t), position(0, 0) {
 void Piece::setShape() {
   switch (pieceType) {
     case PieceType::I:
-      shape = {{1, 0}, {1, 1}, {1, 2}, {1, 3}}; // vertical line
+      shape = {{0, 1}, {1, 1}, {2, 1}, {3, 1}}; // vertical line
       break;
     case PieceType::O:
       shape = {{0, 0}, {0, 1}, {1, 0}, {1, 1}}; // square
