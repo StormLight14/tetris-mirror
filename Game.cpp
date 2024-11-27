@@ -2,7 +2,7 @@
 #include "Piece.hpp"
 #include <ncurses.h>
 
-Game::Game() : playing(true), score(0), level(0), velocityX(1), pieces({Piece(Piece::PieceType::I)}) {
+Game::Game() : playing(true), score(0), level(0), velocityX(0), pieces({Piece(Piece::PieceType::I)}) {
   activePiece = &pieces[0];
 }
 
@@ -17,7 +17,6 @@ void Game::initCurses() {
   cbreak();
   noecho();
   keypad(stdscr, true); // for arrow keys
-  
   nodelay(stdscr, true); // getch() gives ERR if no input
   
   init_pair(1, COLOR_CYAN, COLOR_BLACK);
@@ -66,7 +65,7 @@ bool Game::blockInPos(pair<int, int> pos) {
 void Game::handleMovement() {
   if (velocityX != 0 && activePiece != nullptr) {
     for (auto& block : activePiece->getGlobalShape()) {
-      if (block.second <= 0 || block.second >= getGridWidth() - 1) {
+      if (block.second <= 0 && velocityX == -1 || block.second >= getGridWidth() - 1 && velocityX == 1) {
         return; // wall
       }
       
@@ -75,6 +74,8 @@ void Game::handleMovement() {
       }
 
       activePiece->move(0, velocityX);
+      velocityX = 0; // reset velocity
+      refresh();
     }
   }
 }
@@ -106,8 +107,6 @@ void Game::handleInput() {
     velocityX = -1;
   } else if (key == 'd' || key == KEY_RIGHT) {
     velocityX = 1;
-  } else {
-    //velocityX = 0;
   }
 
   if (key == 's' || key == KEY_DOWN) {
@@ -117,6 +116,8 @@ void Game::handleInput() {
   } else if (key == 'q') {
     playing = false;
   }
+
+  flushinp();
   
   refresh();
 }
@@ -138,4 +139,12 @@ void Game::displayGame() {
   }
 
   refresh(); // show updated display
+}
+
+void Game::incrementElapsedFrames() {
+  elapsedFrames += 1;
+}
+
+int Game::getElapsedFrames() {
+  return elapsedFrames;
 }

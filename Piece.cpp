@@ -48,11 +48,11 @@ vector<pair<int, int>> Piece::getGlobalShape() {
 void Piece::rotate() {
   // goes over each block in the shape
   for (auto& block : shape) {
-    // clockwise is (y, -x) i think..
-    int x = block.second;
+    // clockwise swaps x, y and makes y negative
     int y = block.first;
-    block.first = y;
-    block.second = -x;
+    int x = block.second;
+    block.first = -x;
+    block.second = y;
   }
 }
 
