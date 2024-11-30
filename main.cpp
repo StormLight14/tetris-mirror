@@ -1,49 +1,40 @@
 #include "Game.hpp"
 #include <curses.h>
+#include <chrono>
 #include <thread>
-#include <mutex> // for some thread safety stuff i kinda get
 
 int main() {
-  Game game;
-  game.initCurses();
+    Game game;
+    game.initCurses();
 
-  std::mutex gameMutex;
+    const int FPS = 20;
+    const std::chrono::milliseconds frameDuration(1000 / FPS);
 
-  std::thread inputThread([&]() { // uses a lambda thingy to run input code on a separate thread
-    while (true) {
-      std::lock_guard<std::mutex> lock(gameMutex); // locks mutex for thread safety, unlocks when done using
-      game.handleInput();
+    auto previousTime = std::chrono::steady_clock::now();
 
-      if (!game.playing) {
-        break;
-      }
-    }
-  });
+    while (game.playing) {
+        auto currentTime = std::chrono::steady_clock::now();
+        std::chrono::duration<double> elapsedTime = currentTime - previousTime;
 
-  std::thread gameThread([&]() { // uses a lambda thingy (like a closure i think?) to run input code on a separate thread
-    while (true) {
-      {
-        std::lock_guard<std::mutex> lock(gameMutex); // locks mutex for thread safety, unlocks when done using
-        game.setDefaultGrid();
-        game.handleMovement();
-        if (game.getElapsedFrames() % 5 == 0) {
-          game.handleGravity(); // run gravity 1 in 5 frames
+        game.handleInput();
+
+        {
+            game.setDefaultGrid();
+            game.handleMovement();
+            if (game.getElapsedFrames() % 5 == 0) {
+                game.handleGravity();
+            }
+            game.incrementElapsedFrames();
         }
+
         game.displayGame();
-        game.incrementElapsedFrames();
-      }
 
-      if (!game.playing) {
-        break;
-      }
+        // sleep to maintain consistent frame rate
+        std::this_thread::sleep_for(frameDuration - elapsedTime);
 
-      napms(100);
-      }
-  });
+        previousTime = currentTime;
+    }
 
-  inputThread.join(); // make sure input thread will end
-  gameThread.join();
-  endwin(); // reset terminal settings to default
-  
-  return 0;
+    endwin();  // reset terminal settings to default
+    return 0;
 }
