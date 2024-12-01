@@ -89,7 +89,7 @@ void Game::handleGravity() {
     if (!(block.first < getGridHeight() - 1)) {
       return; // avoid block going past floor
     }
-    if (grid[block.first + 1][block.second] != '#') {
+    if (grid[block.first + 1][block.second] != ' ') {
       return; // block collides with block under
     }
   }
