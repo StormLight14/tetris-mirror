@@ -3,10 +3,11 @@
 #include <vector>
 #include <curses.h>
 #include "Piece.hpp"
+#include <string>
 
 class Piece;
 
-using std::vector, std::pair;
+using std::vector, std::pair, std::string;
 
 class Game {
   public:
@@ -21,7 +22,7 @@ class Game {
     int getGridHeight();
     bool blockInPos(pair<int, int>);
     vector<Piece> getPieces();
-    vector<vector<char>> getGrid();
+    vector<vector<string>> getGrid();
     void setDefaultGrid();
     void incrementElapsedFrames();
     int getElapsedFrames();
@@ -33,6 +34,6 @@ class Game {
     int elapsedFrames;
     Piece* activePiece;
     vector<Piece> pieces;
-    vector<vector<char>> grid;
+    vector<vector<string>> grid;
 };
 

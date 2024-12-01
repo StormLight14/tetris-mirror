@@ -2,7 +2,7 @@
 #include "Piece.hpp"
 #include <ncurses.h>
 
-Game::Game() : playing(true), score(0), level(0), velocityX(0), pieces({Piece(Piece::PieceType::I)}) {
+Game::Game() : playing(true), score(0), level(0), velocityX(0), pieces({Piece(this, Piece::PieceType::I)}) {
   activePiece = &pieces[0];
 }
 
@@ -11,6 +11,7 @@ Game::~Game() {
 }
 
 void Game::initCurses() {
+  setlocale(LC_ALL, "");
   initscr();
   start_color();
 
@@ -40,10 +41,10 @@ void Game::setDefaultGrid() {
   grid = {};
 
   for (int i=0; i<getGridHeight(); i++) {
-    vector<char> row = {};
+    vector<string> row = {};
 
     for (int j=0; j<getGridWidth(); j++) {
-      row.push_back(' ');
+      row.push_back("\u2022");
     }
 
     grid.push_back(row);
@@ -95,7 +96,7 @@ void Game::handleGravity() {
     if (!(block.first < getGridHeight() - 1)) {
       return; // avoid block going past floor
     }
-    if (grid[block.first + 1][block.second] != ' ') {
+    if (grid[block.first + 1][block.second] != "\u2022") {
       return; // block collides with block under
     }
   }
@@ -133,13 +134,13 @@ void Game::displayGame() {
   
   for (auto& piece : pieces) {
     for (auto& block : piece.getGlobalShape())
-    grid[block.first][block.second] = 'P';
+    grid[block.first][block.second] = "P";
   }
 
   for (auto& row : grid) {
     printw("|");
-    for (auto &character : row) {
-      printw("%c", character);
+    for (auto& charstr : row) {
+      printw("%s", charstr.c_str());
     }
     printw("|\n");
   }
