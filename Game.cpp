@@ -43,7 +43,7 @@ void Game::setDefaultGrid() {
     vector<char> row = {};
 
     for (int j=0; j<getGridWidth(); j++) {
-      row.push_back('#');
+      row.push_back(' ');
     }
 
     grid.push_back(row);

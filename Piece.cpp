@@ -46,14 +46,18 @@ vector<pair<int, int>> Piece::getGlobalShape() {
 }
 
 void Piece::rotate() {
+  vector<pair<int, int>> newShape = shape;
+
   // goes over each block in the shape
-  for (auto& block : shape) {
+  for (auto& block : newShape) {
     // clockwise swaps x, y and makes y negative
     int y = block.first;
     int x = block.second;
-    block.first = -x;
-    block.second = y;
+    block.first = x;
+    block.second = -y;
   }
+
+
 }
 
 void Piece::setPosition(int row, int col) {
