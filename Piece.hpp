@@ -1,6 +1,9 @@
 #pragma once
 #include <vector>
 #include <utility>
+#include "Game.hpp"
+
+class Game;
 
 using std::vector, std::pair;
 
@@ -25,6 +28,6 @@ class Piece {
     PieceType pieceType;
     vector<pair<int, int>> shape; // ints are offsets to position (0, 0 in shape == position)
     pair<int, int> position;
-
+    Game* game;
     void setShape(); // based on pieceType
 };

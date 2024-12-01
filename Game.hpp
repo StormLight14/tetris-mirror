@@ -4,7 +4,9 @@
 #include <curses.h>
 #include "Piece.hpp"
 
-using std::vector;
+class Piece;
+
+using std::vector, std::pair;
 
 class Game {
   public:

@@ -62,6 +62,12 @@ bool Game::blockInPos(pair<int, int> pos) {
   return false;
 }
 
+bool isValidNewPos(vector<pair<int, int>>& newShape) {
+  for (auto& block : newShape) {
+
+  }
+}
+
 void Game::handleMovement() {
   if (velocityX != 0 && activePiece != nullptr) {
     for (auto& block : activePiece->getGlobalShape()) {
