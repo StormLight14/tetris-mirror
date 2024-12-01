@@ -96,7 +96,7 @@ void Game::handleGravity() {
     if (!(block.first < getGridHeight() - 1)) {
       return; // avoid block going past floor
     }
-    if (grid[block.first + 1][block.second] != "\u2022") {
+    if (grid[block.first + 1][block.second] != "\u2022") { // empty slot, bullet character
       return; // block collides with block under
     }
   }
@@ -134,7 +134,7 @@ void Game::displayGame() {
   
   for (auto& piece : pieces) {
     for (auto& block : piece.getGlobalShape())
-    grid[block.first][block.second] = "P";
+    grid[block.first][block.second] = "\u2588"; // square character
   }
 
   for (auto& row : grid) {
