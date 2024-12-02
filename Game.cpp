@@ -217,38 +217,16 @@ void Game::displayGame() {
     for (int col = 0; col < getGridWidth(); ++col) {
       if (grid[row][col] == "\u25A0") {
         for (auto& piece : pieces) {
-          if (std::find(piece.getGlobalShape().begin(), piece.getGlobalShape().end(),
-                        std::make_pair(row, col)) != piece.getGlobalShape().end()) {
-            int colorPair = 0;
-            switch (piece.getPieceType()) {
-              case Piece::PieceType::I:
-                colorPair = 1;
-                break;
-              case Piece::PieceType::J:
-                colorPair = 2;
-                break;
-              case Piece::PieceType::L:
-                colorPair = 3;
-                break;
-              case Piece::PieceType::O:
-                colorPair = 4;
-                break;
-              case Piece::PieceType::S:
-                colorPair = 5;
-                break;
-              case Piece::PieceType::T:
-                colorPair = 6;
-                break;
-              case Piece::PieceType::Z:
-                colorPair = 7;
-                break;
-            }
-            attron(COLOR_PAIR(colorPair));
-            if (elapsedFrames % 60 == 0) {
+          if (std::find(piece.getGlobalShape().begin(), piece.getGlobalShape().end(), std::make_pair(row, col)) != piece.getGlobalShape().end()) {
+            int colorPair = static_cast<int>(piece.getPieceType());
+
+            if (elapsedFrames % 200 == 0) {
               std::ostringstream oss;
               oss << colorPair;
               messages.push_back(oss.str());
             }
+
+            attron(COLOR_PAIR(colorPair));
             printw("%s ", grid[row][col].c_str());
             attroff(COLOR_PAIR(colorPair));
             break;
