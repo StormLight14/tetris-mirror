@@ -21,7 +21,7 @@ int main() {
         {
             game.setDefaultGrid();
             game.handleMovement();
-            if (game.getElapsedFrames() % 15 == 0) {
+            if (game.getElapsedFrames() % 30 == 0) {
               game.handleGravity();
               game.handleLineClear();
             }

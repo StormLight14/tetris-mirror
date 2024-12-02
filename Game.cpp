@@ -1,6 +1,7 @@
 #include "Game.hpp"
 #include "Piece.hpp"
 #include <ncurses.h>
+#include <algorithm>
 #include <sstream>
 #include <random>
 #include <iostream>
@@ -139,7 +140,7 @@ void Game::newActivePiece() {
   std::random_device rd;
   std::mt19937 gen(rd());
 
-  std::uniform_int_distribution<> distrib(0, 6);
+  std::uniform_int_distribution<> distrib(1, 7);
   
   Piece newPiece(this, static_cast<Piece::PieceType>(distrib(gen)));
   pieces.push_back(newPiece);
@@ -191,38 +192,62 @@ void Game::handleInput() {
 }
 
 void Game::displayGame() {
-  clear(); // clear window
-  
+  clear(); // Clear the screen/window
+
+  // Reset the grid to empty spaces first
+  for (auto& row : grid) {
+    for (auto& cell : row) {
+      cell = "\u2022"; // Use the empty circle character for empty spaces
+    }
+  }
+
+  // Place each piece on the grid
   for (auto& piece : pieces) {
     int colorPair = static_cast<int>(piece.getPieceType());
 
     for (auto& block : piece.getGlobalShape()) {
-      attron(COLOR_PAIR(colorPair));
-      grid[block.first][block.second] = "\u25A0"; // square character
-      attroff(COLOR_PAIR(colorPair));
+      // Assign the square symbol to the grid
+      grid[block.first][block.second] = "\u25A0";
     }
-
   }
-  
+
+  // Display the grid, applying colors dynamically
   bool shownScore = false;
-  for (auto& row : grid) {
-    printw("|");
-    for (auto& charstr : row) {
-      printw("%s ", charstr.c_str());
+  for (int row = 0; row < getGridHeight(); ++row) {
+    printw("|"); // Left boundary of the grid
+    for (int col = 0; col < getGridWidth(); ++col) {
+      // Check if the cell contains a piece block
+      if (grid[row][col] == "\u25A0") {
+        // Find which piece occupies this block and use its color
+        for (auto& piece : pieces) {
+          if (std::find(piece.getGlobalShape().begin(), piece.getGlobalShape().end(),
+                        std::make_pair(row, col)) != piece.getGlobalShape().end()) {
+            attron(COLOR_PAIR(static_cast<int>(piece.getPieceType())));
+            printw("%s ", grid[row][col].c_str());
+            attroff(COLOR_PAIR(static_cast<int>(piece.getPieceType())));
+            break;
+          }
+        }
+      } else {
+        // Empty space
+        printw("%s ", grid[row][col].c_str());
+      }
     }
     if (!shownScore) {
+      // Display the score next to the top row
       printw("| Current Score: %d\n", score);
       shownScore = true;
     } else {
-      printw("|\n");
+      printw("|\n"); // Just end the row otherwise
     }
   }
 
+  // Display any messages below the grid
   for (auto& message : messages) {
     printw("%s\n", message.c_str());
   }
 
-  refresh(); // show updated display
+  refresh(); // Update the display
 }
 
 void Game::incrementElapsedFrames() {
