@@ -12,7 +12,7 @@ using std::vector, std::pair;
 class Piece {
   public:
     enum class PieceType {
-      I, O, T, S, Z, J, L
+      I=1, O, T, S, Z, J, L
     };
 
     Piece(Game* game, PieceType pieceType);

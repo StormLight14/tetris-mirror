@@ -172,6 +172,10 @@ void Piece::rotateL() {
     }
 }
 
+Piece::PieceType Piece::getPieceType() const {
+  return pieceType;
+}
+
 void Piece::setPosition(int row, int col) {
   position = {row, col}; // y, x
 }

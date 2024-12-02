@@ -3,7 +3,7 @@
 #include <ncurses.h>
 #include <sstream>
 
-Game::Game() : messages(), playing(true), score(0), level(0), velocityX(0), pieces({Piece(this, Piece::PieceType::I)}) {
+Game::Game() : messages(), playing(true), score(0), level(0), velocityX(0), pieces({Piece(this, Piece::PieceType::J)}) {
   activePiece = &pieces[0];
 }
 
@@ -156,8 +156,14 @@ void Game::displayGame() {
   clear(); // clear window
   
   for (auto& piece : pieces) {
-    for (auto& block : piece.getGlobalShape())
-    grid[block.first][block.second] = "\u25A0"; // square character
+    int colorPair = static_cast<int>(piece.getPieceType());
+
+    for (auto& block : piece.getGlobalShape()) {
+      attron(COLOR_PAIR(colorPair));
+      grid[block.first][block.second] = "\u25A0"; // square character
+      attroff(COLOR_PAIR(colorPair));
+    }
+
   }
 
   for (auto& row : grid) {
