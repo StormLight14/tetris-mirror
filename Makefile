@@ -1,6 +1,6 @@
 # Define the compiler and compiler flags
 CXX = g++
-CXXFLAGS = -std=c++20
+CXXFLAGS = -std=c++17
 
 # Define the target executable and source file
 TARGET = main
