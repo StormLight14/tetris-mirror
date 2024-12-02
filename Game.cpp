@@ -10,7 +10,7 @@ Game::Game() : messages(), playing(true), score(0), level(0), velocityX(0), piec
 }
 
 Game::~Game() {
-  delete(activePiece);
+  //delete(activePiece);
 }
 
 void Game::initCurses() {
@@ -147,6 +147,24 @@ void Game::newActivePiece() {
   activePiece->setId(pieces.size() - 1);
 }
 
+void Game::handleLineClear() {
+  // Loop through each row of the grid
+  for (int row = 0; row < getGridHeight(); ++row) {
+    bool fullLine = true;
+
+    // Check if the row is completely filled
+    for (int col = 0; col < getGridWidth(); ++col) {
+      if (grid[row][col] != "\u25A0") {
+        fullLine = false;
+        break;
+      }
+    }
+    if (fullLine) {
+      messages.push_back("CLEARED LINE");
+      score += 100;
+    }
+  }
+}
 
 void Game::handleInput() {
   int key = getch();
