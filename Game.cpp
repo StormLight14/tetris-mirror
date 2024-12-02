@@ -165,13 +165,19 @@ void Game::displayGame() {
     }
 
   }
-
+  
+  bool shownScore = false;
   for (auto& row : grid) {
     printw("|");
     for (auto& charstr : row) {
       printw("%s ", charstr.c_str());
     }
-    printw("|\n");
+    if (!shownScore) {
+      printw("| Current Score: %d\n", score);
+      shownScore = true;
+    } else {
+      printw("|\n");
+    }
   }
 
   for (auto& message : messages) {
