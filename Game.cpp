@@ -149,11 +149,11 @@ void Game::newActivePiece() {
 }
 
 void Game::handleLineClear() {
-  // Loop through each row of the grid
+  // loop through each row of grid
   for (int row = 0; row < getGridHeight(); ++row) {
     bool fullLine = true;
 
-    // Check if the row is completely filled
+    // check if row is completely filled
     for (int col = 0; col < getGridWidth(); ++col) {
       if (grid[row][col] != "\u25A0") {
         fullLine = false;
@@ -192,28 +192,28 @@ void Game::handleInput() {
 }
 
 void Game::displayGame() {
-  clear(); // Clear the screen/window
+  clear(); // clear the screen/window
 
-  // Reset the grid to empty spaces first
+  // reset grid to empty
   for (auto& row : grid) {
     for (auto& cell : row) {
-      cell = "\u2022"; // Use the empty circle character for empty spaces
+      cell = "\u2022"; // use empty circle character for empty spaces
     }
   }
 
-  // Place each piece on the grid
+  // places each piece
   for (auto& piece : pieces) {
     int colorPair = static_cast<int>(piece.getPieceType());
 
     for (auto& block : piece.getGlobalShape()) {
-      // Assign the square symbol to the grid
+      // give each block a square symbol
       grid[block.first][block.second] = "\u25A0";
     }
   }
 
   bool shownScore = false;
   for (int row = 0; row < getGridHeight(); ++row) {
-    printw("|"); // Left boundary of the grid
+    printw("|"); // left boundary
     for (int col = 0; col < getGridWidth(); ++col) {
       if (grid[row][col] == "\u25A0") {
         for (auto& piece : pieces) {
