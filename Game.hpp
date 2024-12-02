@@ -35,5 +35,6 @@ class Game {
     Piece* activePiece;
     vector<Piece> pieces;
     vector<vector<string>> grid;
+    vector<string> messages;
 };
 

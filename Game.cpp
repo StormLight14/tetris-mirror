@@ -1,8 +1,9 @@
 #include "Game.hpp"
 #include "Piece.hpp"
 #include <ncurses.h>
+#include <sstream>
 
-Game::Game() : playing(true), score(0), level(0), velocityX(0), pieces({Piece(this, Piece::PieceType::I)}) {
+Game::Game() : messages(), playing(true), score(0), level(0), velocityX(0), pieces({Piece(this, Piece::PieceType::I)}) {
   activePiece = &pieces[0];
 }
 
@@ -76,14 +77,19 @@ void Game::handleMovement() {
         maxX = block.second;
       }
     }
+    
+    //std::ostringstream oss;
+    //oss << "MinX, MaxX: " << minX << ", " << maxX << " " << getGridWidth();
+    //messages.push_back(oss.str());
+
 
     if (velocityX == -1 && minX <= 0) {
-      printw("game thinks wall is in the way (left).\n");
+      messages.push_back("game thinks wall is in the way (left).");
       return; // wall collision on the left
     }
 
-    if (velocityX == 1 && maxX >= getGridWidth()) {
-      printw("game thinks wall is in the way (right).\n");
+    if (velocityX == 1 && maxX >= getGridWidth() - 1) {
+      messages.push_back("game thinks wall is in the way (right).");
       return; // wall collision on the right
     }
 
@@ -160,6 +166,10 @@ void Game::displayGame() {
       printw("%s ", charstr.c_str());
     }
     printw("|\n");
+  }
+
+  for (auto& message : messages) {
+    printw("%s\n", message.c_str());
   }
 
   refresh(); // show updated display
