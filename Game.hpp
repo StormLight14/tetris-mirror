@@ -17,6 +17,7 @@ class Game {
     void handleInput();
     void handleMovement();
     void handleGravity();
+    void newActivePiece();
     void displayGame();
     int getGridWidth();
     int getGridHeight();

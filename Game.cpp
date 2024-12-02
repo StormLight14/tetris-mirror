@@ -2,6 +2,8 @@
 #include "Piece.hpp"
 #include <ncurses.h>
 #include <sstream>
+#include <random>
+#include <iostream>
 
 Game::Game() : messages(), playing(true), score(0), level(0), velocityX(0), pieces({Piece(this, Piece::PieceType::J)}) {
   activePiece = &pieces[0];
@@ -115,16 +117,35 @@ void Game::handleGravity() {
 
   for (auto& block : activePiece->getGlobalShape()) {
     if (!(block.first < getGridHeight() - 1)) {
-      return; // avoid block going past floor
+      newActivePiece();
+      return; // block collides with floor
     }
-    if (grid[block.first + 1][block.second] != "\u2022") { // empty slot, bullet character
-      return; // block collides with block under
+    for (auto& piece : pieces) {
+      for (auto& pieceBlock : piece.getGlobalShape()) {
+        if (piece.getId() != activePiece->getId() && block.first + 1 == pieceBlock.first && block.second == pieceBlock.second) { // slot not empty
+          messages.push_back("SHOULD COLLIDE");
+          newActivePiece();
+          return; // block collides with block under
+        }
+      }
     }
   }
 
   activePiece->move(1, 0);
 
   refresh();
+}
+
+void Game::newActivePiece() {
+  std::random_device rd;
+  std::mt19937 gen(rd());
+
+  std::uniform_int_distribution<> distrib(0, 6);
+  
+  Piece newPiece(this, static_cast<Piece::PieceType>(distrib(gen)));
+  pieces.push_back(newPiece);
+  activePiece = &pieces[pieces.size() - 1];
+  activePiece->setId(pieces.size() - 1);
 }
 
 
@@ -193,4 +214,8 @@ void Game::incrementElapsedFrames() {
 
 int Game::getElapsedFrames() {
   return elapsedFrames;
+}
+
+vector<Piece> Game::getPieces() {
+  return pieces;
 }

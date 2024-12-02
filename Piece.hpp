@@ -32,12 +32,15 @@ class Piece {
     void setPosition(int y, int x);
     void move(int dirY, int dirX);
     void setPosition(pair<int, int> position);
+    int getId();
+    void setId(int i);
     pair<int, int> getPosition();
   private:
     PieceType pieceType;
     vector<pair<int, int>> shape; // ints are offsets to position (0, 0 in shape == position)
     pair<int, int> position;
     int orientation;
+    int id;
     Game* game;
     void setShape(); // based on pieceType
 };
