@@ -211,43 +211,62 @@ void Game::displayGame() {
     }
   }
 
-  // Display the grid, applying colors dynamically
   bool shownScore = false;
   for (int row = 0; row < getGridHeight(); ++row) {
     printw("|"); // Left boundary of the grid
     for (int col = 0; col < getGridWidth(); ++col) {
-      // Check if the cell contains a piece block
       if (grid[row][col] == "\u25A0") {
-        // Find which piece occupies this block and use its color
         for (auto& piece : pieces) {
           if (std::find(piece.getGlobalShape().begin(), piece.getGlobalShape().end(),
                         std::make_pair(row, col)) != piece.getGlobalShape().end()) {
-            attron(COLOR_PAIR(static_cast<int>(piece.getPieceType())));
+            int colorPair = 0;
+            switch (piece.getPieceType()) {
+              case Piece::PieceType::I:
+                colorPair = 1;
+                break;
+              case Piece::PieceType::J:
+                colorPair = 2;
+                break;
+              case Piece::PieceType::L:
+                colorPair = 3;
+                break;
+              case Piece::PieceType::O:
+                colorPair = 4;
+                break;
+              case Piece::PieceType::S:
+                colorPair = 5;
+                break;
+              case Piece::PieceType::T:
+                colorPair = 6;
+                break;
+              case Piece::PieceType::Z:
+                colorPair = 7;
+                break;
+            }
+            attron(COLOR_PAIR(colorPair));
             printw("%s ", grid[row][col].c_str());
-            attroff(COLOR_PAIR(static_cast<int>(piece.getPieceType())));
+            attroff(COLOR_PAIR(colorPair));
+            refresh();
             break;
           }
         }
       } else {
-        // Empty space
         printw("%s ", grid[row][col].c_str());
       }
     }
     if (!shownScore) {
-      // Display the score next to the top row
       printw("| Current Score: %d\n", score);
       shownScore = true;
     } else {
-      printw("|\n"); // Just end the row otherwise
+      printw("|\n");
     }
   }
 
-  // Display any messages below the grid
   for (auto& message : messages) {
     printw("%s\n", message.c_str());
   }
 
-  refresh(); // Update the display
+  refresh();
 }
 
 void Game::incrementElapsedFrames() {
