@@ -123,7 +123,6 @@ void Game::handleGravity() {
     for (auto& piece : pieces) {
       for (auto& pieceBlock : piece.getGlobalShape()) {
         if (piece.getId() != activePiece->getId() && block.first + 1 == pieceBlock.first && block.second == pieceBlock.second) { // slot not empty
-          messages.push_back("SHOULD COLLIDE");
           newActivePiece();
           return; // block collides with block under
         }
