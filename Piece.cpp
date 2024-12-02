@@ -82,7 +82,7 @@ void Piece::setId(int i) {
 }
 
 void Piece::updatePosition() {
-    // Calculate the new position based on the current shape and orientation
+    // calculate the new position based on the current shape and orientation
     int minX = 100, minY = 100;
     for (const auto& block : shape) {
         minY = std::min(minY, block.first);
@@ -133,7 +133,7 @@ void Piece::rotateS() {
         shape = {{1, 0}, {2, 0}, {0, 1}, {1, 1}}; // S-shape
         orientation = 1;
     } else {
-        shape = {{0, 0}, {1, 0}, {1, 1}, {2, 1}}; // Rotated S-shape
+        shape = {{0, 0}, {1, 0}, {1, 1}, {2, 1}}; // rotated S-shape
         orientation = 0;
     }
 }
@@ -143,7 +143,7 @@ void Piece::rotateZ() {
         shape = {{0, 0}, {1, 0}, {1, 1}, {2, 1}}; // Z-shape
         orientation = 1;
     } else {
-        shape = {{1, 0}, {2, 0}, {0, 1}, {1, 1}}; // Rotated Z-shape
+        shape = {{1, 0}, {2, 0}, {0, 1}, {1, 1}}; // rotated Z-shape
         orientation = 0;
     }
 }
@@ -153,13 +153,13 @@ void Piece::rotateJ() {
         shape = {{0, 0}, {1, 0}, {2, 0}, {2, 1}}; // J-shape
         orientation = 1;
     } else if (orientation == 1) {
-        shape = {{1, 0}, {1, 1}, {1, 2}, {0, 2}}; // Rotated J-shape
+        shape = {{1, 0}, {1, 1}, {1, 2}, {0, 2}}; // rotated J-shape
         orientation = 2;
     } else if (orientation == 2) {
         shape = {{0, 0}, {1, 0}, {2, 0}, {0, 1}}; // J-shape rotated 180 degrees
         orientation = 3;
     } else {
-        shape = {{1, 0}, {1, 1}, {1, 2}, {2, 0}}; // Rotated J-shape
+        shape = {{1, 0}, {1, 1}, {1, 2}, {2, 0}}; // rotated J-shape
         orientation = 0;
     }
 }
@@ -169,13 +169,13 @@ void Piece::rotateL() {
         shape = {{0, 0}, {1, 0}, {2, 0}, {0, 1}}; // L-shape
         orientation = 1;
     } else if (orientation == 1) {
-        shape = {{1, 0}, {1, 1}, {1, 2}, {2, 2}}; // Rotated L-shape
+        shape = {{1, 0}, {1, 1}, {1, 2}, {2, 2}}; // rotated L-shape
         orientation = 2;
     } else if (orientation == 2) {
         shape = {{0, 0}, {1, 0}, {2, 0}, {2, 1}}; // L-shape rotated 180 degrees
         orientation = 3;
     } else {
-        shape = {{1, 0}, {1, 1}, {1, 2}, {0, 0}}; // Rotated L-shape
+        shape = {{1, 0}, {1, 1}, {1, 2}, {0, 0}}; // rotated L-shape
         orientation = 0;
     }
 }

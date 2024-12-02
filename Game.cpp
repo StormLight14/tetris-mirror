@@ -141,7 +141,7 @@ void Game::newActivePiece() {
   std::mt19937 gen(rd());
 
   std::uniform_int_distribution<> distrib(1, 7);
-  
+
   Piece newPiece(this, static_cast<Piece::PieceType>(distrib(gen)));
   pieces.push_back(newPiece);
   activePiece = &pieces[pieces.size() - 1];
@@ -244,6 +244,11 @@ void Game::displayGame() {
                 break;
             }
             attron(COLOR_PAIR(colorPair));
+            if (elapsedFrames % 60 == 0) {
+              std::ostringstream oss;
+              oss << colorPair;
+              messages.push_back(oss.str());
+            }
             printw("%s ", grid[row][col].c_str());
             attroff(COLOR_PAIR(colorPair));
             break;
