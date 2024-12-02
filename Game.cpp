@@ -246,7 +246,6 @@ void Game::displayGame() {
             attron(COLOR_PAIR(colorPair));
             printw("%s ", grid[row][col].c_str());
             attroff(COLOR_PAIR(colorPair));
-            refresh();
             break;
           }
         }
