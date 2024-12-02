@@ -45,10 +45,10 @@ void Game::setDefaultGrid() {
   grid = {};
 
   for (int i=0; i<getGridHeight(); i++) {
-    vector<string> row = {};
+    vector<pair<string, int>> row = {};
 
     for (int j=0; j<getGridWidth(); j++) {
-      row.push_back("\u2022");
+      row.push_back({"\u2022", 0});
     }
 
     grid.push_back(row);
@@ -139,7 +139,6 @@ void Game::handleGravity() {
 void Game::newActivePiece() {
   std::random_device rd;
   std::mt19937 gen(rd());
-
   std::uniform_int_distribution<> distrib(1, 7);
 
   Piece newPiece(this, static_cast<Piece::PieceType>(distrib(gen)));
@@ -155,7 +154,7 @@ void Game::handleLineClear() {
 
     // check if row is completely filled
     for (int col = 0; col < getGridWidth(); ++col) {
-      if (grid[row][col] != "\u25A0") {
+      if (grid[row][col].first != "\u25A0") {
         fullLine = false;
         break;
       }
@@ -197,7 +196,7 @@ void Game::displayGame() {
   // reset grid to empty
   for (auto& row : grid) {
     for (auto& cell : row) {
-      cell = "\u2022"; // use empty circle character for empty spaces
+      cell = {"\u2022", 0}; // use empty circle character for empty spaces
     }
   }
 
@@ -205,7 +204,7 @@ void Game::displayGame() {
   for (auto& piece : pieces) {
     for (auto& block : piece.getGlobalShape()) {
       // give each block a square symbol
-      grid[block.first][block.second] = "\u25A0";
+      grid[block.first][block.second] = {"\u25A0", piece.getIntPieceType()};
     }
   }
 
@@ -213,26 +212,11 @@ void Game::displayGame() {
   for (int row = 0; row < getGridHeight(); ++row) {
     printw("|"); // left boundary
     for (int col = 0; col < getGridWidth(); ++col) {
-      if (grid[row][col] == "\u25A0") {
-        for (auto& piece : pieces) {
-          if (std::find(piece.getGlobalShape().begin(), piece.getGlobalShape().end(), std::make_pair(row, col)) != piece.getGlobalShape().end()) {
-            int colorPair = piece.getIntPieceType();
-
-            if (elapsedFrames % 200 == 0) {
-              std::ostringstream oss;
-              oss << colorPair;
-              messages.push_back(oss.str());
-            }
-
-            attron(COLOR_PAIR(colorPair));
-            printw("%s ", grid[row][col].c_str());
-            attroff(COLOR_PAIR(colorPair));
-            break;
-          }
-        }
-      } else {
-        printw("%s ", grid[row][col].c_str());
-      }
+      attron(COLOR_PAIR(grid[row][col].second));
+      std::ostringstream oss;
+      oss << grid[row][col].first << " ";
+      printw(oss.str().c_str());
+      attroff(COLOR_PAIR(grid[row][col].second));
     }
     if (!shownScore) {
       printw("| Current Score: %d\n", score);

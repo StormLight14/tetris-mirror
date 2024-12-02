@@ -36,7 +36,7 @@ class Game {
     int elapsedFrames;
     Piece* activePiece;
     vector<Piece> pieces;
-    vector<vector<string>> grid;
+    vector<vector<pair<string, int>>> grid;
     vector<string> messages;
 };
 

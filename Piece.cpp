@@ -100,11 +100,11 @@ void Piece::updatePosition() {
 
 void Piece::rotateI() {
     if (orientation == 0) {
-        shape = {{0, 1}, {1, 1}, {2, 1}, {3, 1}}; // vertical line
         orientation = 1;
-    } else {
         shape = {{1, 0}, {1, 1}, {1, 2}, {1, 3}}; // horizontal line
+    } else {
         orientation = 0;
+        shape = {{0, 1}, {1, 1}, {2, 1}, {3, 1}}; // vertical line
     }
 }
 
@@ -123,7 +123,7 @@ void Piece::rotateT() {
         shape = {{1, 0}, {1, 1}, {1, 2}, {2, 1}}; // T-shape rotated 180 degrees
         orientation = 3;
     } else {
-        shape = {{1, 0}, {1, 1}, {2, 1}, {1, 2}}; // T-shape rotated 270 degrees
+        shape = {{0, 1}, {1, 0}, {1, 1}, {1, 2}}; // T-shape rotated 270 degrees
         orientation = 0;
     }
 }
