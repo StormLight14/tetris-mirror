@@ -84,12 +84,12 @@ void Game::handleMovement() {
 
 
     if (velocityX == -1 && minX <= 0) {
-      messages.push_back("game thinks wall is in the way (left).");
+      //messages.push_back("game thinks wall is in the way (left).");
       return; // wall collision on the left
     }
 
     if (velocityX == 1 && maxX >= getGridWidth() - 1) {
-      messages.push_back("game thinks wall is in the way (right).");
+      //messages.push_back("game thinks wall is in the way (right).");
       return; // wall collision on the right
     }
 
