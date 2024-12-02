@@ -34,7 +34,7 @@ int main() {
 
         previousTime = currentTime;
     }
-
+    
     endwin();  // reset terminal settings to default
     return 0;
 }

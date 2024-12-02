@@ -46,18 +46,25 @@ vector<pair<int, int>> Piece::getGlobalShape() {
 }
 
 void Piece::rotate() {
-  Piece* tempPiece = new Piece(*this);
+  Piece tempPiece = *this;
 
   // goes over each block in the shape
-  for (auto& block : tempPiece->getShape()) {
+  for (auto& block : tempPiece.shape) {
     // clockwise swaps x, y and makes y negative
-    int y = block.first;
-    int x = block.second;
-    block.first = x;
-    block.second = -y;
+    int newX = block.first;
+    int newY = -block.second;
+    block.first = newY;
+    block.second = newX;
+
+    int globalY = block.first + position.first;
+    int globalX = block.second + position.second;
+
+    if (game->blockInPos({globalY, globalX}) || globalY < 0 || globalY >= game->getGridHeight() || globalX < 0 || globalX >= game->getGridWidth()) {
+      return;
+    }
   }
-  
-  delete(tempPiece);
+
+  shape = tempPiece.shape;
 }
 
 void Piece::setPosition(int row, int col) {

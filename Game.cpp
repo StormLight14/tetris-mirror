@@ -63,12 +63,6 @@ bool Game::blockInPos(pair<int, int> pos) {
   return false;
 }
 
-bool isValidNewPos(vector<pair<int, int>>& newShape) {
-  for (auto& block : newShape) {
-
-  }
-}
-
 void Game::handleMovement() {
   if (velocityX != 0 && activePiece != nullptr) {
     for (auto& block : activePiece->getGlobalShape()) {
@@ -119,7 +113,9 @@ void Game::handleInput() {
   if (key == 's' || key == KEY_DOWN) {
     // speed up movement speed
   } else if (key == 'w' || key == KEY_UP) {
-    // rotate
+    if (activePiece != nullptr) {
+      activePiece->rotate();
+    }
   } else if (key == 'q') {
     playing = false;
   }
