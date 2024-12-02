@@ -22,7 +22,7 @@ class Game {
     void displayGame();
     int getGridWidth();
     int getGridHeight();
-    bool blockInPos(pair<int, int>);
+    bool blockInPos(pair<int, int>, int pieceId);
     vector<Piece> getPieces();
     vector<vector<string>> getGrid();
     void setDefaultGrid();

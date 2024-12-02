@@ -56,7 +56,7 @@ void Piece::rotate() {
   }
 
   for (auto& block : rotatedPiece.getGlobalShape()) {
-    if (block.first < 0 || block.first >= game->getGridHeight() || block.second < 0 || block.second >= game->getGridWidth() || game->blockInPos({block.first, block.second})) {
+    if (block.first < 0 || block.first >= game->getGridHeight() || block.second < 0 || block.second >= game->getGridWidth() || game->blockInPos({block.first, block.second}, rotatedPiece.getId())) {
       return; // wall in the way
     }
   }

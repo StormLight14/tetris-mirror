@@ -55,12 +55,17 @@ void Game::setDefaultGrid() {
   }
 }
 
-bool Game::blockInPos(pair<int, int> pos) {
+bool Game::blockInPos(pair<int, int> pos, int pieceId = -1) {
   for (auto& piece : pieces) {
     for (auto& block : piece.getGlobalShape()) {
+      bool blockInPos = false;
       if (block.first == pos.first && block.second == pos.second) {
-        return true;
+        blockInPos = true;
       }
+      if (pieceId != -1 && piece.getId() != pieceId) {
+        blockInPos = false;
+      }
+      
     }
   }
 
