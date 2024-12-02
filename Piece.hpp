@@ -12,7 +12,7 @@ using std::vector, std::pair;
 class Piece {
   public:
     enum class PieceType {
-      I=1, O, T, S, Z, J, L
+      I=1, O=2, T=3, S=4, Z=5, J=6, L=7
     };
 
     Piece(Game* game, PieceType pieceType);
@@ -28,6 +28,7 @@ class Piece {
     vector<pair<int, int>> getShape() const; // gets coordinates of each block that makes up the shape
     vector<pair<int, int>> getGlobalShape(); // gives shape relative to global coordinates
     PieceType getPieceType() const;
+    int getIntPieceType() const;
     void setPosition();
     void setPosition(int y, int x);
     void move(int dirY, int dirX);

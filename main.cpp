@@ -21,10 +21,12 @@ int main() {
         {
             game.setDefaultGrid();
             game.handleMovement();
+            
             if (game.getElapsedFrames() % 30 == 0) {
               game.handleGravity();
               game.handleLineClear();
             }
+
             game.incrementElapsedFrames();
         }
 

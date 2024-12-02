@@ -184,6 +184,10 @@ Piece::PieceType Piece::getPieceType() const {
   return pieceType;
 }
 
+int Piece::getIntPieceType() const {
+  return static_cast<int>(pieceType);
+}
+
 void Piece::setPosition(int row, int col) {
   position = {row, col}; // y, x
 }

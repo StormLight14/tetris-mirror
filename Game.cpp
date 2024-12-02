@@ -203,8 +203,6 @@ void Game::displayGame() {
 
   // places each piece
   for (auto& piece : pieces) {
-    int colorPair = static_cast<int>(piece.getPieceType());
-
     for (auto& block : piece.getGlobalShape()) {
       // give each block a square symbol
       grid[block.first][block.second] = "\u25A0";
@@ -218,7 +216,7 @@ void Game::displayGame() {
       if (grid[row][col] == "\u25A0") {
         for (auto& piece : pieces) {
           if (std::find(piece.getGlobalShape().begin(), piece.getGlobalShape().end(), std::make_pair(row, col)) != piece.getGlobalShape().end()) {
-            int colorPair = static_cast<int>(piece.getPieceType());
+            int colorPair = piece.getIntPieceType();
 
             if (elapsedFrames % 200 == 0) {
               std::ostringstream oss;
