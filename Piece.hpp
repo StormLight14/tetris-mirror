@@ -17,14 +17,6 @@ class Piece {
 
     Piece(Game* game, PieceType pieceType);
     void rotate(); // will be clockwise
-    void updatePosition();
-    void rotateI();
-    void rotateO();
-    void rotateT();
-    void rotateS();
-    void rotateZ();
-    void rotateJ();
-    void rotateL();
     vector<pair<int, int>> getShape() const; // gets coordinates of each block that makes up the shape
     vector<pair<int, int>> getGlobalShape(); // gives shape relative to global coordinates
     PieceType getPieceType() const;

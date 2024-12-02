@@ -7,7 +7,7 @@ Piece::Piece(Game* g, PieceType t) : shape({}), id(0), game(g), pieceType(t), po
 void Piece::setShape() {
   switch (pieceType) {
     case PieceType::I:
-      shape = {{1, 0}, {1, 1}, {1, 2}, {1, 3}}; // horizontal line
+      shape = {{0, 1}, {1, 1}, {2, 1}, {3, 1}}; // vertical line
       break;
     case PieceType::O:
       shape = {{0, 0}, {0, 1}, {1, 0}, {1, 1}}; // square
@@ -46,31 +46,11 @@ vector<pair<int, int>> Piece::getGlobalShape() {
 }
 
 void Piece::rotate() {
-    switch (pieceType) {
-        case PieceType::I:
-            Piece::rotateI();
-            break;
-        case PieceType::O:
-            rotateO();
-            break;
-        case PieceType::T:
-            rotateT();
-            break;
-        case PieceType::S:
-            rotateS();
-            break;
-        case PieceType::Z:
-            rotateZ();
-            break;
-        case PieceType::J:
-            rotateJ();
-            break;
-        case PieceType::L:
-            rotateL();
-            break;
-    }
-
-  updatePosition();
+  for (auto& block : shape) {
+    int tempY = block.first;
+    block.first = block.second;
+    block.second = -tempY;
+  }
 }
 
 int Piece::getId() {
@@ -79,105 +59,6 @@ int Piece::getId() {
 
 void Piece::setId(int i) {
   id = i;
-}
-
-void Piece::updatePosition() {
-    // calculate the new position based on the current shape and orientation
-    int minX = 100, minY = 100;
-    for (const auto& block : shape) {
-        minY = std::min(minY, block.first);
-        minX = std::min(minX, block.second);
-    }
-
-    // recalculate position relative to the grid
-    position.first = (position.first - minY); // center around smallest y
-    position.second = (position.second - minX); // center around smallest x
-
-    // adjust if the piece is near the edge of the grid
-    if (position.first < 0) position.first = 0;
-    if (position.second < 0) position.second = 0;
-}
-
-void Piece::rotateI() {
-    if (orientation == 0) {
-        orientation = 1;
-        shape = {{1, 0}, {1, 1}, {1, 2}, {1, 3}}; // horizontal line
-    } else {
-        orientation = 0;
-        shape = {{0, 1}, {1, 1}, {2, 1}, {3, 1}}; // vertical line
-    }
-}
-
-void Piece::rotateO() {
-  // idk why i made this it does nothing, cause its a square
-}
-
-void Piece::rotateT() {
-    if (orientation == 0) {
-        shape = {{0, 1}, {1, 0}, {1, 1}, {1, 2}}; // T-shape vertical
-        orientation = 1;
-    } else if (orientation == 1) {
-        shape = {{0, 1}, {1, 1}, {1, 0}, {2, 1}}; // T-shape rotated 90 degrees
-        orientation = 2;
-    } else if (orientation == 2) {
-        shape = {{1, 0}, {1, 1}, {1, 2}, {2, 1}}; // T-shape rotated 180 degrees
-        orientation = 3;
-    } else {
-        shape = {{0, 1}, {1, 0}, {1, 1}, {1, 2}}; // T-shape rotated 270 degrees
-        orientation = 0;
-    }
-}
-
-void Piece::rotateS() {
-    if (orientation == 0) {
-        shape = {{1, 0}, {2, 0}, {0, 1}, {1, 1}}; // S-shape
-        orientation = 1;
-    } else {
-        shape = {{0, 0}, {1, 0}, {1, 1}, {2, 1}}; // rotated S-shape
-        orientation = 0;
-    }
-}
-
-void Piece::rotateZ() {
-    if (orientation == 0) {
-        shape = {{0, 0}, {1, 0}, {1, 1}, {2, 1}}; // Z-shape
-        orientation = 1;
-    } else {
-        shape = {{1, 0}, {2, 0}, {0, 1}, {1, 1}}; // rotated Z-shape
-        orientation = 0;
-    }
-}
-
-void Piece::rotateJ() {
-    if (orientation == 0) {
-        shape = {{0, 0}, {1, 0}, {2, 0}, {2, 1}}; // J-shape
-        orientation = 1;
-    } else if (orientation == 1) {
-        shape = {{1, 0}, {1, 1}, {1, 2}, {0, 2}}; // rotated J-shape
-        orientation = 2;
-    } else if (orientation == 2) {
-        shape = {{0, 0}, {1, 0}, {2, 0}, {0, 1}}; // J-shape rotated 180 degrees
-        orientation = 3;
-    } else {
-        shape = {{1, 0}, {1, 1}, {1, 2}, {2, 0}}; // rotated J-shape
-        orientation = 0;
-    }
-}
-
-void Piece::rotateL() {
-    if (orientation == 0) {
-        shape = {{0, 0}, {1, 0}, {2, 0}, {0, 1}}; // L-shape
-        orientation = 1;
-    } else if (orientation == 1) {
-        shape = {{1, 0}, {1, 1}, {1, 2}, {2, 2}}; // rotated L-shape
-        orientation = 2;
-    } else if (orientation == 2) {
-        shape = {{0, 0}, {1, 0}, {2, 0}, {2, 1}}; // L-shape rotated 180 degrees
-        orientation = 3;
-    } else {
-        shape = {{1, 0}, {1, 1}, {1, 2}, {0, 0}}; // rotated L-shape
-        orientation = 0;
-    }
 }
 
 Piece::PieceType Piece::getPieceType() const {
