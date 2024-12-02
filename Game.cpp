@@ -130,13 +130,13 @@ void Game::displayGame() {
   
   for (auto& piece : pieces) {
     for (auto& block : piece.getGlobalShape())
-    grid[block.first][block.second] = "\u2588"; // square character
+    grid[block.first][block.second] = "\u25A0"; // square character
   }
 
   for (auto& row : grid) {
     printw("|");
     for (auto& charstr : row) {
-      printw("%s", charstr.c_str());
+      printw("%s ", charstr.c_str());
     }
     printw("|\n");
   }
