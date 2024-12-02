@@ -46,11 +46,22 @@ vector<pair<int, int>> Piece::getGlobalShape() {
 }
 
 void Piece::rotate() {
-  for (auto& block : shape) {
-    int tempY = block.first;
-    block.first = block.second;
-    block.second = -tempY;
+  Piece rotatedPiece = *this;
+
+  for (auto& block : rotatedPiece.shape) {
+    int oldY = block.first;
+    int oldX = block.second;
+    block.first = oldX;
+    block.second = -oldY;
   }
+
+  for (auto& block : rotatedPiece.getGlobalShape()) {
+    if (block.first < 0 || block.first >= game->getGridHeight() || block.second < 0 || block.second >= game->getGridWidth() || game->blockInPos({block.first, block.second})) {
+      return; // wall in the way
+    }
+  }
+
+  shape = rotatedPiece.shape;
 }
 
 int Piece::getId() {
