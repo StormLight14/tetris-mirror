@@ -65,19 +65,40 @@ bool Game::blockInPos(pair<int, int> pos) {
 
 void Game::handleMovement() {
   if (velocityX != 0 && activePiece != nullptr) {
-    for (auto& block : activePiece->getGlobalShape()) {
-      if (block.second <= 0 && velocityX == -1 || block.second >= getGridWidth() - 1 && velocityX == 1) {
-        return; // wall
-      }
-      
-      if (blockInPos({block.first, block.second + velocityX})) {
-        return; // a block is in the way
-      }
+    int minX = 100;
+    int maxX = -100;
 
-      activePiece->move(0, velocityX);
-      velocityX = 0; // reset velocity
-      refresh();
+    for (auto& block : activePiece->getGlobalShape()) {
+      if (block.second < minX) {
+        minX = block.second;
+      }
+      if (block.second > maxX) {
+        maxX = block.second;
+      }
     }
+
+    if (velocityX == -1 && minX <= 0) {
+      printw("game thinks wall is in the way (left).\n");
+      return; // wall collision on the left
+    }
+
+    if (velocityX == 1 && maxX >= getGridWidth()) {
+      printw("game thinks wall is in the way (right).\n");
+      return; // wall collision on the right
+    }
+
+    for (auto& block : activePiece->getGlobalShape()) {
+      if (velocityX == -1 && block.second == minX && blockInPos({block.first, block.second - 1})) {
+        return;
+      }
+      if (velocityX == 1 && block.second == maxX && blockInPos({block.first, block.second + 1})) {
+        return;
+      }
+    }
+
+    activePiece->move(0, velocityX);
+    velocityX = 0; // reset velocity after moving
+    refresh();
   }
 }
 

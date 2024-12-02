@@ -22,7 +22,7 @@ int main() {
             game.setDefaultGrid();
             game.handleMovement();
             if (game.getElapsedFrames() % 20 == 0) {
-                game.handleGravity();
+              game.handleGravity();
             }
             game.incrementElapsedFrames();
         }
