@@ -100,7 +100,7 @@ void Game::handleMovement() {
     }
 
     if (velocityX == 1) {
-      if (minX >= getGridWidth() - 1) {
+      if (maxX >= getGridWidth() - 1) {
         return;
       }
     }
