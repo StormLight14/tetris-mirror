@@ -1,6 +1,6 @@
 #include "Piece.hpp"
 
-Piece::Piece(Game* g, PieceType t) : shape({}), game(g), pieceType(t), position(2, 2), orientation(0) {
+Piece::Piece(Game* g, PieceType t) : shape({}), game(g), pieceType(t), position(0, 5), orientation(0) {
   setShape();
 }
 

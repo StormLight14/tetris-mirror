@@ -6,7 +6,7 @@
 #include <random>
 #include <iostream>
 
-Game::Game() : blocks({}), messages(), playing(true), score(0), level(0), velocityX(0), activePiece(new Piece(this, Piece::PieceType::J)) {
+Game::Game() : blocks({}), messages(), playing(true), score(0), level(0), velocityX(0), activePiece(new Piece(this, Piece::PieceType::J)), speedUp(false), instantDrop(false) {
 
 }
 
@@ -115,6 +115,7 @@ void Game::handleMovement() {
 }
 
 void Game::handleGravity() {
+  speedUp = false;
   if (activePiece == nullptr) {
     return;
   }
@@ -138,10 +139,10 @@ void Game::handleGravity() {
 }
 
 void Game::newActivePiece() {
+  instantDrop = false; // piece has dropped
   std::random_device rd;
   std::mt19937 gen(rd());
   std::uniform_int_distribution<> distrib(1, 7);
-
 
   if (activePiece != nullptr) {
     for (auto const block : activePiece->getGlobalShape()) {
@@ -214,9 +215,12 @@ void Game::handleInput() {
   } else if (key == 'd' || key == KEY_RIGHT) {
     velocityX = 1;
   }
-
-  if (key == 's' || key == KEY_DOWN) {
-    // speed up movement speed
+  
+  if (key == 32) { // spacebar
+    instantDrop = true;
+  }
+  else if (key == 's' || key == KEY_DOWN) {
+    speedUp = true;
   } else if (key == 'w' || key == KEY_UP) {
     activePiece->rotate();
   } else if (key == 'q') {
@@ -245,7 +249,6 @@ void Game::displayGame() {
   // places each piece
   for (auto& block : blocks) {
     // give each block a square symbol
-    std::cerr << "y: " << block.y << "\nx: " << block.x;
     grid[block.y][block.x] = {"\u25A0", block.intPieceType};
   }
   

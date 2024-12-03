@@ -33,6 +33,8 @@ class Game {
     void setDefaultGrid();
     void incrementElapsedFrames();
     int getElapsedFrames();
+    bool speedUp;
+    bool instantDrop;
     bool playing;
   private:
     int score;
