@@ -9,7 +9,7 @@ int main() {
   game.initCurses();
 
   const int FPS = 20;
-  const std::chrono::milliseconds frameDuration(1000 / FPS);
+  std::chrono::milliseconds frameDuration(1000 / FPS);
 
   auto previousTime = std::chrono::steady_clock::now();
 
@@ -24,6 +24,10 @@ int main() {
     if (game.getElapsedFrames() % 15 == 0) {
       game.handleGravity();
       game.handleLineClear();
+    }
+
+    if (game.getElapsedFrames() % 30 == 0) {
+      frameDuration *= 1.1;
     }
 
     game.incrementElapsedFrames();
