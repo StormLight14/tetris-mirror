@@ -153,21 +153,56 @@ void Game::newActivePiece() {
 }
 
 void Game::handleLineClear() {
-  // loop through each row of grid
-  for (int row = 0; row < getGridHeight(); ++row) {
-    bool fullLine = true;
-
-    // check if row is completely filled
-    for (int col = 0; col < getGridWidth(); ++col) {
-      if (grid[row][col].first != "\u25A0") {
-        fullLine = false;
-        break;
+  // get which rows cleared
+  vector<int> clearedRows = {};
+  for (int i = 0; i < getGridHeight(); i++) {
+    int rowBlocks = 0;
+    for (auto& block : blocks) {
+      if (block.y == i) {
+        rowBlocks += 1;
       }
     }
-    if (fullLine) {
-      messages.push_back("CLEARED LINE");
-      score += 100;
+
+    if (rowBlocks >= getGridWidth()) {
+      clearedRows.push_back(i);
     }
+  }
+  
+  // remove all the cleared blocks
+  blocks.erase(
+        std::remove_if(blocks.begin(), blocks.end(), [&](const Block& block) {
+            return std::find(clearedRows.begin(), clearedRows.end(), block.y) != clearedRows.end();
+        }),
+        blocks.end()
+    );
+  
+  if (clearedRows.size()) {
+    for (auto& block : blocks) {
+      // only move blocks that are above the lowest cleared row
+      if (block.y < *std::min_element(clearedRows.begin(), clearedRows.end())) {
+        // move the block down by the number of rows cleared
+        if (block.y < getGridHeight() - 1) {
+          block.y += clearedRows.size();
+        }
+      }
+    }
+  }
+
+  switch (clearedRows.size()) {
+    case 1:
+      score += 100;
+      break;
+    case 2:
+      break;
+      score += 300;
+    case 3:
+      score += 500;
+      break;
+    case 4:
+      score += 800;
+      break;
+    default:
+      return;
   }
 }
 
