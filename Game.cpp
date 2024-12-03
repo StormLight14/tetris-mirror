@@ -6,12 +6,12 @@
 #include <random>
 #include <iostream>
 
-Game::Game() : messages(), playing(true), score(0), level(0), velocityX(0), pieces({Piece(this, Piece::PieceType::J)}) {
-  activePiece = &pieces[0];
+Game::Game() : blocks({}), messages(), playing(true), score(0), level(0), velocityX(0), activePiece(new Piece(this, Piece::PieceType::J)) {
+
 }
 
 Game::~Game() {
-  //delete(activePiece);
+  delete(activePiece);
 }
 
 void Game::initCurses() {
@@ -55,25 +55,23 @@ void Game::setDefaultGrid() {
   }
 }
 
-bool Game::blockInPos(pair<int, int> pos, int pieceId = -1) {
-  for (auto& piece : pieces) {
-    for (auto& block : piece.getGlobalShape()) {
+bool Game::blockInPos(pair<int, int> pos) {
+    for (auto& block : blocks) {
       bool blockInPos = false;
-      if (block.first == pos.first && block.second == pos.second) {
+      if (block.y == pos.first && block.x == pos.second) {
         blockInPos = true;
       }
-      if (pieceId != -1 && piece.getId() != pieceId) {
-        blockInPos = false;
-      }
-      
-    }
   }
 
   return false;
 }
 
 void Game::handleMovement() {
-  if (velocityX != 0 && activePiece != nullptr) {
+  if (activePiece == nullptr) {
+    return;
+  }
+
+  if (velocityX != 0) {
     int minX = 100;
     int maxX = -100;
 
@@ -121,17 +119,15 @@ void Game::handleGravity() {
     return;
   }
 
-  for (auto& block : activePiece->getGlobalShape()) {
-    if (!(block.first < getGridHeight() - 1)) {
+  for (auto& activeBlock : activePiece->getGlobalShape()) {
+    if (!(activeBlock.first < getGridHeight() - 1)) {
       newActivePiece();
       return; // block collides with floor
     }
-    for (auto& piece : pieces) {
-      for (auto& pieceBlock : piece.getGlobalShape()) {
-        if (piece.getId() != activePiece->getId() && block.first + 1 == pieceBlock.first && block.second == pieceBlock.second) { // slot not empty
-          newActivePiece();
-          return; // block collides with block under
-        }
+    for (auto& block : blocks) {
+      if (activeBlock.first + 1 == block.y && activeBlock.second == block.x) { // slot not empty
+        newActivePiece();
+        return; // block collides with block under
       }
     }
   }
@@ -146,10 +142,14 @@ void Game::newActivePiece() {
   std::mt19937 gen(rd());
   std::uniform_int_distribution<> distrib(1, 7);
 
-  Piece newPiece(this, static_cast<Piece::PieceType>(distrib(gen)));
-  pieces.push_back(newPiece);
-  activePiece = &pieces[pieces.size() - 1];
-  activePiece->setId(pieces.size() - 1);
+
+  if (activePiece != nullptr) {
+    for (auto const block : activePiece->getGlobalShape()) {
+      blocks.push_back(Block{block.second, block.first, activePiece->getIntPieceType()});
+    }
+  }
+
+  activePiece = new Piece(this, static_cast<Piece::PieceType>(distrib(gen)));
 }
 
 void Game::handleLineClear() {
@@ -183,9 +183,7 @@ void Game::handleInput() {
   if (key == 's' || key == KEY_DOWN) {
     // speed up movement speed
   } else if (key == 'w' || key == KEY_UP) {
-    if (activePiece != nullptr) {
-      activePiece->rotate();
-    }
+    activePiece->rotate();
   } else if (key == 'q') {
     playing = false;
   }
@@ -197,6 +195,10 @@ void Game::handleInput() {
 
 void Game::displayGame() {
   clear(); // clear the screen/window
+  
+  if (activePiece == nullptr) {
+    return;
+  }
 
   // reset grid to empty
   for (auto& row : grid) {
@@ -206,11 +208,14 @@ void Game::displayGame() {
   }
 
   // places each piece
-  for (auto& piece : pieces) {
-    for (auto& block : piece.getGlobalShape()) {
-      // give each block a square symbol
-      grid[block.first][block.second] = {"\u25A0", piece.getIntPieceType()};
-    }
+  for (auto& block : blocks) {
+    // give each block a square symbol
+    std::cerr << "y: " << block.y << "\nx: " << block.x;
+    grid[block.y][block.x] = {"\u25A0", block.intPieceType};
+  }
+  
+  for (auto& block : activePiece->getGlobalShape()) {
+    grid[block.first][block.second] = {"\u25A0", activePiece->getIntPieceType()};
   }
 
   bool shownScore = false;
@@ -244,8 +249,4 @@ void Game::incrementElapsedFrames() {
 
 int Game::getElapsedFrames() {
   return elapsedFrames;
-}
-
-vector<Piece> Game::getPieces() {
-  return pieces;
 }

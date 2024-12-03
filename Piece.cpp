@@ -1,6 +1,6 @@
 #include "Piece.hpp"
 
-Piece::Piece(Game* g, PieceType t) : shape({}), id(0), game(g), pieceType(t), position(2, 2), orientation(0) {
+Piece::Piece(Game* g, PieceType t) : shape({}), game(g), pieceType(t), position(2, 2), orientation(0) {
   setShape();
 }
 
@@ -34,7 +34,7 @@ vector<pair<int, int>> Piece::getShape() const {
   return shape;
 }
 
-vector<pair<int, int>> Piece::getGlobalShape() {
+vector<pair<int, int>> Piece::getGlobalShape() const {
   vector<pair<int, int>> globalShape = {};
 
   for (auto& offset : getShape()) {
@@ -56,20 +56,12 @@ void Piece::rotate() {
   }
 
   for (auto& block : rotatedPiece.getGlobalShape()) {
-    if (block.first < 0 || block.first >= game->getGridHeight() || block.second < 0 || block.second >= game->getGridWidth() || game->blockInPos({block.first, block.second}, rotatedPiece.getId())) {
+    if (block.first < 0 || block.first >= game->getGridHeight() || block.second < 0 || block.second >= game->getGridWidth() || game->blockInPos({block.first, block.second})) {
       return; // wall in the way
     }
   }
 
   shape = rotatedPiece.shape;
-}
-
-int Piece::getId() {
-  return id;
-}
-
-void Piece::setId(int i) {
-  id = i;
 }
 
 Piece::PieceType Piece::getPieceType() const {
@@ -93,6 +85,6 @@ void Piece::move(int dirY, int dirX) {
   position.second += dirX;
 }
 
-pair<int, int> Piece::getPosition() {
+pair<int, int> Piece::getPosition() const {
   return position;
 }
