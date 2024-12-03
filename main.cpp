@@ -2,6 +2,7 @@
 #include <curses.h>
 #include <chrono>
 #include <thread>
+#include <iostream>
 
 int main() {
   Game game;
@@ -43,5 +44,6 @@ int main() {
   }
   
   endwin();  // reset terminal settings to default
+  std::cout << "Final score: " << game.getScore() << "\n";
   return 0;
 }

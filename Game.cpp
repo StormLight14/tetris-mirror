@@ -41,6 +41,10 @@ int Game::getGridHeight() {
   return 20;
 }
 
+int Game::getScore() {
+  return score;
+}
+
 void Game::setDefaultGrid() {
   grid = {};
 
@@ -151,6 +155,8 @@ void Game::newActivePiece() {
   }
 
   activePiece = new Piece(this, static_cast<Piece::PieceType>(distrib(gen)));
+
+  handleLoss();
 }
 
 void Game::handleLineClear() {
@@ -204,6 +210,20 @@ void Game::handleLineClear() {
       break;
     default:
       return;
+  }
+}
+
+void Game::handleLoss() {
+  if (activePiece == nullptr) {
+    return;
+  }
+
+  for (auto& activeBlock : activePiece->getGlobalShape()) {
+    for (auto& block : blocks) {
+      if (activeBlock.first == block.y && activeBlock.second == block.x) {
+        playing = false;
+      }
+    }
   }
 }
 

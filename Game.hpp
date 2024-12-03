@@ -25,6 +25,7 @@ class Game {
     void handleGravity();
     void newActivePiece();
     void handleLineClear();
+    void handleLoss();
     void displayGame();
     int getGridWidth();
     int getGridHeight();
@@ -33,6 +34,7 @@ class Game {
     void setDefaultGrid();
     void incrementElapsedFrames();
     int getElapsedFrames();
+    int getScore();
     bool speedUp;
     bool instantDrop;
     bool playing;
