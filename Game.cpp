@@ -60,14 +60,14 @@ void Game::setDefaultGrid() {
 }
 
 bool Game::blockInPos(pair<int, int> pos) {
-    for (auto& block : blocks) {
-      bool blockInPos = false;
-      if (block.y == pos.first && block.x == pos.second) {
-        blockInPos = true;
-      }
+  bool blockInPos = false;
+  for (auto& block : blocks) {
+    if (block.y == pos.first && block.x == pos.second) {
+      blockInPos = true;
+    }
   }
 
-  return false;
+  return blockInPos;
 }
 
 void Game::handleMovement() {
@@ -93,14 +93,16 @@ void Game::handleMovement() {
     //messages.push_back(oss.str());
 
 
-    if (velocityX == -1 && minX <= 0) {
-      //messages.push_back("game thinks wall is in the way (left).");
-      return; // wall collision on the left
+    if (velocityX == -1) {
+      if (minX <= 0) {
+        return;
+      }
     }
 
-    if (velocityX == 1 && maxX >= getGridWidth() - 1) {
-      //messages.push_back("game thinks wall is in the way (right).");
-      return; // wall collision on the right
+    if (velocityX == 1) {
+      if (minX >= getGridWidth() - 1) {
+        return;
+      }
     }
 
     for (auto& block : activePiece->getGlobalShape()) {
