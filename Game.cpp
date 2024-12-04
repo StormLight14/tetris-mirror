@@ -202,8 +202,8 @@ void Game::handleLineClear() {
       score += 100;
       break;
     case 2:
-      break;
       score += 300;
+      break;
     case 3:
       score += 500;
       break;
