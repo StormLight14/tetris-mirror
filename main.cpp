@@ -26,8 +26,8 @@ int main() {
       game.handleLineClear();
     }
 
-    if (game.getElapsedFrames() % 30 == 0) {
-      frameDuration *= 1.1;
+    if (game.getElapsedFrames() % 1000 == 0 && frameDuration > std::chrono::milliseconds(2)) {
+      frameDuration -= std::chrono::milliseconds(1);
     }
 
     game.incrementElapsedFrames();
